@@ -102,10 +102,8 @@ fetch("https://apigato.herokuapp.com/")
 const optionsBar = {
   series: [{
     name: 'Khaleesi',
-    data: [32.18, 31.73, 31.66, 0]
   }, {
     name: 'Lisa',
-    data: [62.31, 16.86, 2.74, 2.89]
   }],
   chart: {
     type: 'bar',
@@ -131,17 +129,21 @@ const optionsBar = {
     width: 2,
     colors: ['transparent']
   },
-  xaxis: {
-    categories: ['31/10', '01/11', '02/11', '03/11'],
-  },
-  yaxis: {
-
-  },
+  xaxis: {},
+  yaxis: {},
   fill: {
     opacity: 1
   },
   tooltip: {}
 };
 
-const chartBar = new ApexCharts(document.querySelector("#chartBar"), optionsBar);
-chartBar.render();
+
+fetch("https://apigato.herokuapp.com/totalconsumo")
+.then((response) => {
+  return response.json()
+}).then((json) => {
+  optionsBar.series = json.series;
+  optionsBar.xaxis.categories = json.xaxis;
+  const chartBar = new ApexCharts(document.querySelector("#chartBar"), optionsBar);
+  chartBar.render();
+})
